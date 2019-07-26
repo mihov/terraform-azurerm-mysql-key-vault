@@ -1,37 +1,29 @@
 # terraform-azurerm-mysql
-A terraform module to create a basic MySQL on Azure database server including a database. Numeral input options can be specified if desired, including setting a resource lock or not.
+A terraform module to create a basic MySQL on Azure database server including a database and store some parameters to Key Vault. Numeral input options can be specified if desired, including setting a resource lock or not.
 
 ## Usage
 
 ```hcl
-module "my_mysql" {
-  source            = "mihov/mysql/azurerm"
-  version           = "0.1.0"
-  location          = "northeurope"
-  my_environment    = "production"
-  db_server_name    = "mydb"
-  tags {
-      Project       = "Some project number 010011"
-      Contact       = "Some Business Contact Person"
-  }
+module "mysql-key-vault" {
+  source                  = "mihov/mysql-key-vault/azurerm"
+  version                 = "0.1.0"
+  resource_group_name     = "resource_group_name"
+  key_vault_id            = "key_vault_id"
 }
 ```
 ## Inputs
 
-### resource_group
+### resource_group_name
 The resource group where the resource should be created.
+
+### resource_group_location
+Specifies the supported Azure location where the resource exists. Changing this forces a new resource to be created.
 
 ### prefix
 An optional prefix to use in naming schemes, sometimes unique names are required.
 
 ### my_environment
 An environment might have implications on naming schemes, or deployment options.
-
-### location
-Specifies the supported Azure location where the resource exists. Changing this forces a new resource to be created.
-
-### tags
-A mapping of tags to assign to the resource. For instance business stakeholders, or who pays for it?
 
 ### db_server_name
 Specifies the name of the MySQL Server. Changing this forces a new resource to be created. This needs to be globally unique within Azure.
@@ -69,8 +61,6 @@ Backup retention days for the server, supported values are between 7 and 35 days
 ### geo_redundant_backup
 Enable Geo-redundant or not for server backup. Valid values for this property are Enabled or Disabled, not supported for the basic tier.
 
-
-
 ### start_ip_address
 Specifies the Start IP Address associated with this Firewall Rule. Changing this forces a new resource to be created.
 
@@ -91,28 +81,8 @@ Specifies the Charset for the MySQL Database, which needs to be a valid MySQL Ch
 ### collation
 Specifies the Collation for the MySQL Database, which needs to be a valid MySQL Collation. Changing this forces a new resource to be created.
 
-### create_lock
-Whether to lock the resource group or not. true enables the lock, false does not lock the resource group.
+## Output
+There is no output
 
-### resource_lock_name
-Specifies the name of the Management Lock. Changing this forces a new resource to be created.
-
-### lock_level
-Specifies the Level to be used for this Lock. Possible values are CanNotDelete and ReadOnly. Changing this forces a new resource to be created.
-
-### notes
-Specifies some notes about the lock. Maximum of 512 characters. Changing this forces a new resource to be created.
-
-## Outputs
-
-### fqdn
-The Fully Qualified Domain Name of the MySQL on Azure database server.
-
-### db_server_name
-The name of the MySQL Server.
-
-### db_name
-The name of the database.
-
-### admin_username
-The administrator login name of the MySQL Server.
+Values of **administrator_login**, **administrator_login_password** and **fqdn** should be stored in to destination key vault.
+    

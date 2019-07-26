@@ -1,48 +1,33 @@
-variable "subscription_id" {
-  description = "The Azure subscription ID"
-  default     = "d578a84e-3877-447c-9e4a-7ee9190d4e74"
+variable "resource_group_name" {
+  description = "(Required) The name of the resource group. Must be unique on your Azure subscription."
 }
 
-variable "tenant_id" {
-  description = "18d9dd72-3769-4aa6-ab74-6eff6abf6dfe"
+variable "resource_group_location" {
+  default = "northeurope"
+  description = "(Required) The location where the resource group should be created. For a list of all Azure locations, please consult this link or run az account list-locations --output table."
 }
 
 variable "prefix" {
-  default     = "bosch"
+  default     = ""
   description = "An optional prefix to use in naming schemes, sometimes unique names are required."
 }
 
 variable "my_environment" {
-  default     = "production"
-  description = "An environment might have implications on naming schemes, or deployment options."
+  default     = "development"
+  description = "An environment might have implications on naming schemes, or deployment options [production, development, accept or test]."
 }
 
 variable "envname" {
   type = "map"
 
   default = {
-    "production"  = ""
+    "production"  = "prod"
     "development" = "dev"
     "accept"      = "acc"
     "test"        = "tst"
   }
 
   description = "This environment name map constructs the name of the resource to be created."
-}
-
-variable "location" {
-  default     = "northeurope"
-  description = "Specifies the supported Azure location where the resource exists. Changing this forces a new resource to be created."
-}
-
-variable "tags" {
-  type = "map"
-
-  default = {
-    "Project" = "Terraform module test"
-  }
-
-  description = "A mapping of tags to assign to the resource. For instance business stakeholders, or who pays for it?"
 }
 
 variable "db_server_name" {
@@ -56,7 +41,7 @@ variable "admin_username" {
 }
 
 variable "admin_password" {
-  default     = "H@Sh1CoR3!"
+  default     = "$tr0ngP@$$w0rd"
   description = "The Password associated with the administrator_login for the MySQL Server."
 }
 
@@ -138,26 +123,6 @@ variable "collation" {
   description = "Specifies the Collation for the MySQL Database, which needs to be a valid MySQL Collation. Changing this forces a new resource to be created."
 }
 
-variable "create_lock" {
-  default     = true
-  description = "Whether to lock the resource group or not. true enables the lock, false does not lock the resource group."
-}
-
-variable "resource_lock_name" {
-  default     = "lock-on-resource-group"
-  description = "Specifies the name of the Management Lock. Changing this forces a new resource to be created."
-}
-
-variable "lock_level" {
-  default     = "CanNotDelete"
-  description = "Specifies the Level to be used for this Lock. Possible values are CanNotDelete and ReadOnly. Changing this forces a new resource to be created."
-}
-
-variable "notes" {
-  default     = "This Resource Group is locked to prevent unintended deletion."
-  description = "Specifies some notes about the lock. Maximum of 512 characters. Changing this forces a new resource to be created."
-}
-
 variable "server_mysql_configuration" {
   type = "map"
   default = {
@@ -166,25 +131,9 @@ variable "server_mysql_configuration" {
     "innodb_large_prefix"  = "ON"
   }
 
-  description = "This environment name map specific server configurations."
-}
-
-variable "resource_group" {
-  type = "map"
-  default = {
-    name     = "bosch"
-    location = "northeurope"
-  }
-
-  description = "This environment name map specific server configurations."
-}
-
-variable "key_vault_name" {
-  default = "keyVaultBosch"
-  description = "This environment name map specific server configurations."
+  description = "Specific server configurations."
 }
 
 variable "key_vault_id" {
-  description = ""
-  default = ""
+  description = "(Required) The ID of the Key Vault where the Secret should be created."
 }
